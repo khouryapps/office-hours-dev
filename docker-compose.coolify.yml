@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=staging
       - DOMAIN=${DOMAIN}
       - DB_URL=postgres://officehours:${POSTGRES_PASSWORD}@postgres:5432/officehours
       - JWT_SECRET=${JWT_SECRET}
