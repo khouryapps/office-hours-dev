@@ -1,0 +1,13 @@
+name: deploy-dev
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  deploy:
+    runs-on: khouryapps-runners
+    steps:
+      - name: Trigger coolify deploy
+        run: |
+          curl --request GET "${{ secrets.COOLIFY_WEBHOOK }}" --header "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
