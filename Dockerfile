@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim
+FROM node:14-bullseye
 
 WORKDIR /app
 ENV HUSKY=0 CYPRESS_INSTALL_BINARY=0
