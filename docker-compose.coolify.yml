@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=staging
+      - DOMAIN=${DOMAIN}
+      - DB_URL=postgres://officehours:${POSTGRES_PASSWORD}@postgres:5432/officehours
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
+      - KHOURY_HMAC_KEY=${KHOURY_HMAC_KEY}
+      - PUBLICKEY=${PUBLICKEY}
+      - PRIVATEKEY=${PRIVATEKEY}
+      - EMAIL=${EMAIL}
+      - UPLOAD_LOCATION=/data/uploads
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  postgres:
+    image: postgres:11
+    environment:
+      - POSTGRES_DB=officehours
+      - POSTGRES_USER=officehours
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U officehours -d officehours"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  pg:
+  uploads:
